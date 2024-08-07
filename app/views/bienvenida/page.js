@@ -25,13 +25,13 @@ export default function Juego() {
 
   useEffect(() => {
     if (temporizador === 0) {
-      setPuntos(puntos - 1);
+      setPuntos((prevPuntos) => prevPuntos - 1);
       seleccionarPaisAleatorio(paises);
     } else {
       const cuentaRegresiva = setTimeout(() => setTemporizador(temporizador - 1), 1000);
       return () => clearTimeout(cuentaRegresiva);
     }
-  }, [temporizador]);
+  }, [temporizador, paises]);
 
   useEffect(() => {
     const puntuacionesGuardadas = JSON.parse(localStorage.getItem('tablaPuntuaciones')) || [];
@@ -47,29 +47,48 @@ export default function Juego() {
 
   const manejarAdivinanza = () => {
     if (respuesta.toLowerCase() === paisSeleccionado.name.toLowerCase()) {
-      setPuntos(puntos + 10 + temporizador);
-      seleccionarPaisAleatorio(paises);
+      setPuntos((prevPuntos) => prevPuntos + 1);
     } else {
-      setPuntos(puntos - 1);
+      setPuntos((prevPuntos) => prevPuntos - 1);
     }
     setRespuesta('');
+    seleccionarPaisAleatorio(paises);
   };
 
   const manejarAyuda = () => {
-    setPistas(pistas + 1);
-    setTemporizador(temporizador - 2);
+    setPistas((prevPistas) => prevPistas + 1);
+    setTemporizador((prevTemporizador) => prevTemporizador - 2);
   };
 
   const guardarPuntuacion = () => {
     const nuevaTablaPuntuaciones = [...tablaPuntuaciones, { nombre: nombreJugador, puntos }];
     setTablaPuntuaciones(nuevaTablaPuntuaciones);
     localStorage.setItem('tablaPuntuaciones', JSON.stringify(nuevaTablaPuntuaciones));
+    setPuntos(0);
   };
 
   return (
     <div className={styles.contenedor}>
       <h1 className={styles.h1}>Juego de Adivinanza de Banderas</h1>
-      <div>
+      <div className={styles.padre}>
+      {paisSeleccionado && (
+        <div>
+          <img className={styles.img} src={paisSeleccionado.flag} alt="bandera del país" />
+          <p>Adivina el país:</p>
+          <input
+            className={styles.input}
+            type="text"
+            value={respuesta}
+            onChange={(e) => setRespuesta(e.target.value)}
+          />
+          <button className={styles.button2} onClick={manejarAdivinanza}>Adivinar</button>
+          <p>Puntos: {puntos}</p>
+        </div>
+
+        
+      )}
+
+      <div className={styles.div_jugador}>
         <label className={styles.label}>
           Nombre del Jugador:
           <input
@@ -81,24 +100,9 @@ export default function Juego() {
         </label>
         <button className={styles.button} onClick={guardarPuntuacion}>Guardar Puntuación</button>
       </div>
-      {paisSeleccionado && (
-        <div >
-          <img className={styles.img} src={paisSeleccionado.flag} alt="bandera del país" />
-          <p>Adivina el país:</p>
-          <input
-            className={styles.input}
-            type="text"
-            value={respuesta}
-            onChange={(e) => setRespuesta(e.target.value)}
-          />
-         
-          <button className={styles.button2} onClick={manejarAdivinanza}>Adivinar</button>
-        
-          
-          <p>Puntos: {puntos}</p>
-         
-        </div>
-      )}
+      </div>
+      
+
       <div>
         <h2>Tabla de Puntuaciones</h2>
         <ul className={styles.ul}>

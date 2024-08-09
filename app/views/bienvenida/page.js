@@ -11,6 +11,7 @@ export default function Juego() {
   const [nombreJugador, setNombreJugador] = useState('');
   const [tablaPuntuaciones, setTablaPuntuaciones] = useState([]);
   const [pistas, setPistas] = useState(0);
+  const [jugadorIngresado, setJugadorIngresado] = useState(false);
 
   useEffect(() => {
     async function obtenerPaises() {
@@ -65,43 +66,50 @@ export default function Juego() {
     setTablaPuntuaciones(nuevaTablaPuntuaciones);
     localStorage.setItem('tablaPuntuaciones', JSON.stringify(nuevaTablaPuntuaciones));
     setPuntos(0);
+    setJugadorIngresado(false);
+  };
+
+  const iniciarJuego = () => {
+    setJugadorIngresado(true);
   };
 
   return (
     <div className={styles.contenedor}>
       <h1 className={styles.h1}>Juego de Adivinanza de Banderas</h1>
-      <div className={styles.padre}>
-      {paisSeleccionado && (
-        <div>
-          <img className={styles.img} src={paisSeleccionado.flag} alt="bandera del país" />
-          <p>Adivina el país:</p>
-          <input
-            className={styles.input}
-            type="text"
-            value={respuesta}
-            onChange={(e) => setRespuesta(e.target.value)}
-          />
-          <button className={styles.button2} onClick={manejarAdivinanza}>Adivinar</button>
-          <p>Puntos: {puntos}</p>
+
+      {!jugadorIngresado ? (
+        <div className={styles.div_jugador}>
+          <label className={styles.label}>
+            Nombre del Jugador:
+            <input
+              className={styles.input}
+              type="text"
+              value={nombreJugador}
+              onChange={(e) => setNombreJugador(e.target.value)}
+            />
+          </label>
+          <button className={styles.button} onClick={iniciarJuego}>Comenzar Juego</button>
         </div>
+      ) : (
+        <div className={styles.padre}>
+          {paisSeleccionado && (
+            <div className={styles.padre_andentro}>
+              <img className={styles.img} src={paisSeleccionado.flag} alt="bandera del país" />
+              <p>Adivina el país:</p>
+              <input
+                className={styles.input}
+                type="text"
+                value={respuesta}
+                onChange={(e) => setRespuesta(e.target.value)}
+              />
+              <button className={styles.button2} onClick={manejarAdivinanza}>Adivinar</button>
+              <p className={styles.puntos}>Puntos: {puntos}</p>
+            </div>
+          )}
 
-        
+          <button className={styles.button} onClick={guardarPuntuacion}>Guardar Puntuación</button>
+        </div>
       )}
-
-      <div className={styles.div_jugador}>
-        <label className={styles.label}>
-          Nombre del Jugador:
-          <input
-            className={styles.input}
-            type="text"
-            value={nombreJugador}
-            onChange={(e) => setNombreJugador(e.target.value)}
-          />
-        </label>
-        <button className={styles.button} onClick={guardarPuntuacion}>Guardar Puntuación</button>
-      </div>
-      </div>
-      
 
       <div>
         <h2>Tabla de Puntuaciones</h2>

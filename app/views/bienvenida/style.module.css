@@ -1,13 +1,16 @@
-.padre{
+.padre {
   display: flex;
   justify-content: center;
+  align-items: center;
 }
-.div_jugador{
+
+.div_jugador {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
+
 .contenedor {
   display: flex;
   flex-direction: column;
@@ -28,6 +31,15 @@
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
+.puntos {
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+  color: black;
+  font-size: 20px;
+  text-align: end;
+}
+
 .label {
   font-size: 1.5rem;
   margin-bottom: 10px;
@@ -46,45 +58,31 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.button {
-  background-color: #4CAF50;
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 1rem;
-  margin: 10px 2px;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
 
-.button:hover {
-  background-color: #45a049;
-}
-.button2 {
-  background-color: #4CAF50;
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 1rem;
-  margin: 10px 2px;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
 
-.button2:hover {
-  background-color: #45a049;
-}
-.padre{
+.button-group {
   display: flex;
- 
+  gap: 10px; /* Espacio entre los botones */
+  margin-top: 10px;
+}
+
+.button, .button2 {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  padding: 10px 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.button:hover, .button2:hover {
+  background-color: #45a049;
 }
 
 .img {
@@ -100,7 +98,7 @@
   padding: 0;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr ;
+  grid-template-rows: 1fr;
   grid-gap: 20px;
 }
 

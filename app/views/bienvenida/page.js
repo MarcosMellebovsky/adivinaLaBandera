@@ -56,10 +56,7 @@ export default function Juego() {
     seleccionarPaisAleatorio(paises);
   };
 
-  const manejarAyuda = () => {
-    setPistas((prevPistas) => prevPistas + 1);
-    setTemporizador((prevTemporizador) => prevTemporizador - 2);
-  };
+
 
   const guardarPuntuacion = () => {
     const nuevaTablaPuntuaciones = [...tablaPuntuaciones, { nombre: nombreJugador, puntos }];
@@ -70,7 +67,11 @@ export default function Juego() {
   };
 
   const iniciarJuego = () => {
-    setJugadorIngresado(true);
+    if (nombreJugador.trim() === '') {
+      alert('Por favor, ingresa tu nombre para comenzar el juego.');
+    } else {
+      setJugadorIngresado(true);
+    }
   };
 
   return (
@@ -86,6 +87,7 @@ export default function Juego() {
               type="text"
               value={nombreJugador}
               onChange={(e) => setNombreJugador(e.target.value)}
+              required
             />
           </label>
           <button className={styles.button} onClick={iniciarJuego}>Comenzar Juego</button>
@@ -102,12 +104,13 @@ export default function Juego() {
                 value={respuesta}
                 onChange={(e) => setRespuesta(e.target.value)}
               />
-              <button className={styles.button2} onClick={manejarAdivinanza}>Adivinar</button>
+              <div className={styles.button_group}>
+                <button className={styles.button2} onClick={manejarAdivinanza}>Adivinar</button>
+                <button className={styles.button} onClick={guardarPuntuacion}>Guardar Puntuación</button>
+              </div>
               <p className={styles.puntos}>Puntos: {puntos}</p>
             </div>
           )}
-
-          <button className={styles.button} onClick={guardarPuntuacion}>Guardar Puntuación</button>
         </div>
       )}
 

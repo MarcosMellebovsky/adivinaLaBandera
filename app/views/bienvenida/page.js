@@ -10,7 +10,7 @@ export default function Juego() {
   const [temporizador, setTemporizador] = useState(15);
   const [nombreJugador, setNombreJugador] = useState('');
   const [tablaPuntuaciones, setTablaPuntuaciones] = useState([]);
-  const [pistas, setPistas] = useState(0);
+  const [pistas, setPistas] = useState(5);  // Inicialmente, 5 pistas disponibles
   const [jugadorIngresado, setJugadorIngresado] = useState(false);
 
   useEffect(() => {
@@ -24,19 +24,15 @@ export default function Juego() {
     obtenerPaises();
   }, []);
 
-  
-    useEffect(() => {
-      if (temporizador === 0) {
-        setPuntos((prevPuntos) => prevPuntos - 1);
-        seleccionarPaisAleatorio(paises);
-      } else {
-        const cuentaRegresiva = setTimeout(() => setTemporizador(temporizador - 1), 1000);
-        return () => clearTimeout(cuentaRegresiva);
-      }
-    }, [temporizador, paises]);
- 
-
-  
+  useEffect(() => {
+    if (temporizador === 0) {
+      setPuntos((prevPuntos) => prevPuntos - 1);
+      seleccionarPaisAleatorio(paises);
+    } else {
+      const cuentaRegresiva = setTimeout(() => setTemporizador(temporizador - 1), 1000);
+      return () => clearTimeout(cuentaRegresiva);
+    }
+  }, [temporizador, paises]);
 
   useEffect(() => {
     const puntuacionesGuardadas = JSON.parse(localStorage.getItem('tablaPuntuaciones')) || [];
@@ -46,23 +42,19 @@ export default function Juego() {
   const seleccionarPaisAleatorio = (paises) => {
     const indiceAleatorio = Math.floor(Math.random() * paises.length);
     setPaisSeleccionado(paises[indiceAleatorio]);
-    setPistas(0);
+    setPistas(5); // Reinicia las pistas cuando se selecciona un nuevo país
     setTemporizador(15);
-
-    
+    setRespuesta(''); // Limpia la respuesta al seleccionar un nuevo país
   };
 
   const manejarAdivinanza = () => {
-    if (respuesta.toLowerCase() == paisSeleccionado.name.toLowerCase()) {
+    if (respuesta.toLowerCase() === paisSeleccionado.name.toLowerCase()) {
       setPuntos((prevPuntos) => prevPuntos + 1);
     } else {
       setPuntos((prevPuntos) => prevPuntos - 1);
     }
-    setRespuesta('');
     seleccionarPaisAleatorio(paises);
   };
-
-
 
   const guardarPuntuacion = () => {
     const nuevaTablaPuntuaciones = [...tablaPuntuaciones, { nombre: nombreJugador, puntos }];
@@ -78,7 +70,27 @@ export default function Juego() {
     } else {
       setJugadorIngresado(true);
       setTemporizador(15);
+    }
+  };
 
+  const darPista = () => {
+    if (pistas > 0 && paisSeleccionado) {
+      const nombrePais = paisSeleccionado.name.toUpperCase();
+      let nuevaRespuesta = respuesta.toUpperCase();
+
+      // Encuentra la primera letra no revelada en el nombre del país
+      for (let i = 0; i < nombrePais.length; i++) {
+        if (nombrePais[i] !== ' ' && !nuevaRespuesta.includes(nombrePais[i])) {
+          nuevaRespuesta += nombrePais[i];
+          break;
+        }
+      }
+
+      if (nuevaRespuesta !== respuesta) {
+        setRespuesta(nuevaRespuesta);
+        setPistas(pistas - 1);
+        setTemporizador((prevTemporizador) => Math.max(prevTemporizador - 2, 0)); // Restar 2 segundos, sin pasar a negativo
+      }
     }
   };
 
@@ -114,16 +126,16 @@ export default function Juego() {
               />
               <div className={styles.button_group}>
                 <button className={styles.button2} onClick={manejarAdivinanza}>Adivinar</button>
+                <button className={styles.button} onClick={darPista}>Pista</button>
                 <button className={styles.button} onClick={guardarPuntuacion}>Guardar Puntuación</button>
               </div>
               <p className={styles.puntos}>Puntos: {puntos}</p>
+              <p>Tiempo: {temporizador}</p>
+              <p>Pistas restantes: {pistas}</p>
             </div>
           )}
-          { (<p>Tiempo:{temporizador}</p>)}
         </div>
       )}
-
-      
 
       <div>
         <h2>Tabla de Puntuaciones</h2>

@@ -42,9 +42,10 @@ export default function Juego() {
   const seleccionarPaisAleatorio = (paises) => {
     const indiceAleatorio = Math.floor(Math.random() * paises.length);
     setPaisSeleccionado(paises[indiceAleatorio]);
-    setPistas(5); // Reinicia las pistas cuando se selecciona un nuevo país
+    console.log(paises[indiceAleatorio])
+    setPistas(5); 
     setTemporizador(15);
-    setRespuesta(''); // Limpia la respuesta al seleccionar un nuevo país
+    setRespuesta(''); 
   };
 
   const manejarAdivinanza = () => {

@@ -78,7 +78,6 @@ export default function Juego() {
       const nombrePais = paisSeleccionado.name.toUpperCase();
       let nuevaRespuesta = respuesta.toUpperCase();
 
-      // Encuentra la primera letra no revelada en el nombre del país
       for (let i = 0; i < nombrePais.length; i++) {
         if (nombrePais[i] !== ' ' && !nuevaRespuesta.includes(nombrePais[i])) {
           nuevaRespuesta += nombrePais[i];
@@ -89,7 +88,7 @@ export default function Juego() {
       if (nuevaRespuesta !== respuesta) {
         setRespuesta(nuevaRespuesta);
         setPistas(pistas - 1);
-        setTemporizador((prevTemporizador) => Math.max(prevTemporizador - 2, 0)); // Restar 2 segundos, sin pasar a negativo
+        setTemporizador((prevTemporizador) => Math.max(prevTemporizador - 2, 0)); 
       }
     }
   };
